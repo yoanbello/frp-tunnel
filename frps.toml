@@ -2,3 +2,4 @@ bindPort = 7000
 vhostHTTPPort = 7075
 auth.method = "token"
 auth.token = "{{ .Envs.FRP_SERVER_TOKEN }}"
+subdomainHost = "tunnels.digitalprojex.site"
