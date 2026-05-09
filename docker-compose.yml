@@ -6,15 +6,14 @@ services:
     ports:
       - '7000:7000'
     environment:
-      - FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}
+      - "FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}"
     labels:
-      - traefik.enable=true
-      # Cambiamos el nombre a 'frp-v3' para que Traefik cree una ruta limpia
+      - "traefik.enable=true"
+      # Error 1: Usa comillas dobles fuera para proteger los acentos graves ` `
       - "traefik.http.routers.frp-v3.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
+      # Error 2: Estas líneas DEBEN llevar comillas porque tienen puntos y signos igual
       - "traefik.http.routers.frp-v3.tls=true"
       - "traefik.http.routers.frp-v3.tls.certresolver=letsencrypt"
-      
-      # Nuevo nombre de servicio
       - "traefik.http.routers.frp-v3.service=frp-v3-svc"
       - "traefik.http.services.frp-v3-svc.loadbalancer.server.port=7075"
       - "traefik.http.services.frp-v3-svc.loadbalancer.passhostheader=true"
