@@ -9,15 +9,15 @@ services:
       - FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}
     labels:
       - traefik.enable=true
-      # Eliminamos la línea de entrypoints para que Traefik no dé error
-      - "traefik.http.routers.frp-final.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
-      - "traefik.http.routers.frp-final.tls=true"
-      - "traefik.http.routers.frp-final.tls.certresolver=letsencrypt"
+      # Cambiamos el nombre a 'frp-v3' para que Traefik cree una ruta limpia
+      - "traefik.http.routers.frp-v3.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
+      - "traefik.http.routers.frp-v3.tls=true"
+      - "traefik.http.routers.frp-v3.tls.certresolver=letsencrypt"
       
-      # Servicio (Asegúrate de que el nombre sea único)
-      - "traefik.http.routers.frp-final.service=frp-final-svc"
-      - "traefik.http.services.frp-final-svc.loadbalancer.server.port=7075"
-      - "traefik.http.services.frp-final-svc.loadbalancer.passhostheader=true"
+      # Nuevo nombre de servicio
+      - "traefik.http.routers.frp-v3.service=frp-v3-svc"
+      - "traefik.http.services.frp-v3-svc.loadbalancer.server.port=7075"
+      - "traefik.http.services.frp-v3-svc.loadbalancer.passhostheader=true"
     networks:
       - coolify
 
