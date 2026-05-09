@@ -1,0 +1,17 @@
+services:
+  frps:
+    build: .
+    container_name: frps-server
+    restart: always
+    ports:
+      - '7000:7000'
+      - '8080:8080'
+    environment:
+      - FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.frp-tunnels.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
+      - traefik.http.routers.frp-tunnels.entrypoints=websecure
+      - traefik.http.routers.frp-tunnels.tls=true
+      - traefik.http.routers.frp-tunnels.tls.certresolver=letsencrypt
+      - traefik.http.services.frp-tunnels.loadbalancer.server.port=8080
