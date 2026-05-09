@@ -9,16 +9,15 @@ services:
       - FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}
     labels:
       - traefik.enable=true
-      # Router para HTTPS
-      - "traefik.http.routers.frp-wildcard-router.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
-      - "traefik.http.routers.frp-wildcard-router.entrypoints=websecure" # Cambiado a websecure
-      - "traefik.http.routers.frp-wildcard-router.tls=true" # Activa TLS
-      - "traefik.http.routers.frp-wildcard-router.tls.certresolver=letsencrypt" # Usa tu resolver de Coolify
+      # Eliminamos la línea de entrypoints para que Traefik no dé error
+      - "traefik.http.routers.frp-final.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
+      - "traefik.http.routers.frp-final.tls=true"
+      - "traefik.http.routers.frp-final.tls.certresolver=letsencrypt"
       
-      # Servicio (el que conecta con el contenedor FRP)
-      - "traefik.http.routers.frp-wildcard-router.service=frp-wildcard-service"
-      - "traefik.http.services.frp-wildcard-service.loadbalancer.server.port=7075"
-      - "traefik.http.services.frp-wildcard-service.loadbalancer.passhostheader=true"
+      # Servicio (Asegúrate de que el nombre sea único)
+      - "traefik.http.routers.frp-final.service=frp-final-svc"
+      - "traefik.http.services.frp-final-svc.loadbalancer.server.port=7075"
+      - "traefik.http.services.frp-final-svc.loadbalancer.passhostheader=true"
     networks:
       - coolify
 
