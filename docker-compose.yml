@@ -3,20 +3,22 @@ services:
     build: .
     container_name: frps-server
     restart: always
+
     ports:
-      - '7000:7000'
+      - "7000:7000"
+
     environment:
       - "FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}"
+
     labels:
       - "traefik.enable=true"
-      # Error 1: Usa comillas dobles fuera para proteger los acentos graves ` `
       - "traefik.http.routers.frp-v3.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
-      # Error 2: Estas líneas DEBEN llevar comillas porque tienen puntos y signos igual
-      - "traefik.http.routers.frp-v3.tls=true"
-      - "traefik.http.routers.frp-v3.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.frp-v3.entrypoints=web"
+      - "traefik.http.routers.frp-v3.priority=10000"
       - "traefik.http.routers.frp-v3.service=frp-v3-svc"
       - "traefik.http.services.frp-v3-svc.loadbalancer.server.port=7075"
       - "traefik.http.services.frp-v3-svc.loadbalancer.passhostheader=true"
+
     networks:
       - coolify
 
