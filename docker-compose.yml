@@ -8,9 +8,14 @@ services:
     environment:
       - FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}
     labels:
-      - traefik.enable=true    
-      - traefik.http.routers.frp-tunnels.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)    
-      - traefik.http.routers.frp-tunnels.entrypoints=web    
-      - traefik.http.services.frp-tunnels.loadbalancer.server.port=8080    
-      - traefik.http.services.frp-tunnels.loadbalancer.passhostheader=true    
-      - traefik.http.routers.frp-tunnels.priority=999
+      - traefik.enable=true
+      - "traefik.http.routers.frp-tunnels.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
+      - "traefik.http.routers.frp-tunnels.entrypoints=web"
+      - "traefik.http.services.frp-tunnels.loadbalancer.server.port=7075"
+      - "traefik.http.services.frp-tunnels.loadbalancer.passhostheader=true"
+    networks:
+      - coolify
+
+networks:
+  coolify:
+    external: true
