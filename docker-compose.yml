@@ -9,10 +9,16 @@ services:
       - FRP_SERVER_TOKEN=${FRP_SERVER_TOKEN}
     labels:
       - traefik.enable=true
-      - "traefik.http.routers.frp-tunnels.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
-      - "traefik.http.routers.frp-tunnels.entrypoints=web"
-      - "traefik.http.services.frp-tunnels.loadbalancer.server.port=7075"
-      - "traefik.http.services.frp-tunnels.loadbalancer.passhostheader=true"
+      # Router para HTTPS
+      - "traefik.http.routers.frp-wildcard-router.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tunnels.digitalprojex.site`)"
+      - "traefik.http.routers.frp-wildcard-router.entrypoints=websecure" # Cambiado a websecure
+      - "traefik.http.routers.frp-wildcard-router.tls=true" # Activa TLS
+      - "traefik.http.routers.frp-wildcard-router.tls.certresolver=letsencrypt" # Usa tu resolver de Coolify
+      
+      # Servicio (el que conecta con el contenedor FRP)
+      - "traefik.http.routers.frp-wildcard-router.service=frp-wildcard-service"
+      - "traefik.http.services.frp-wildcard-service.loadbalancer.server.port=7075"
+      - "traefik.http.services.frp-wildcard-service.loadbalancer.passhostheader=true"
     networks:
       - coolify
 
